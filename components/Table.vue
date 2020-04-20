@@ -10,7 +10,7 @@
         <div class="row sm-col-12">
             <div class="col-6">
                 Sorting by
-                <button v-for="(column, i) in showedColumns"
+                <button v-for="(column, i) in orderedShowedColumns"
                      :key="i"
                      @click.prevent="() => setSortColumn(column.value)"
                      class="btn" v-bind:class="{'btn-selected': column.value === sortingValue}"
@@ -55,13 +55,13 @@
                 <th v-for="(column) in showedColumns">
                     {{column.title}}
                 </th>
-                <tr v-for="(item) in sortedItems" class="table-row" :key="item.id" @click="() => selectRow(item)">
+                <tr v-for="(item) in slicedItems" class="table-row" :key="item.id" @click="() => selectRow(item)">
 
                     <td>
                         <input type="checkbox" :checked="selectedItems.some(i => item.id === i.id)" >
                     </td>
 
-                    <td v-for="column in showedColumns">
+                    <td v-for="column in orderedShowedColumns">
                         {{item[column.value]}}
                     </td>
 
@@ -112,12 +112,17 @@
             deleteItems(items){
                 if (!confirm(`Are you sure you want to delete ${this.selectedItems.length} items?`)) return
                 this.$emit('deleteItems', items)
-            }
+            },
         },
         async mounted(){
             this.selectedColumns = this.columns
         },
         computed: {
+            orderedShowedColumns(){
+                return this.showedColumns.sort((a, b) =>
+                    a.value === this.sortingValue ? -1 : b.value === this.sortingValue ? 1 : 0
+                )
+            },
             allItemsAreSelected() {
                 return this.selectedItems.length === this.sortedItems.length
             },
@@ -130,10 +135,10 @@
             //     return this.page*this.rowsPerPage <= this.items.length
             // },
             slicedItems() {
-                return this.items.slice(this.rowsPerPage * (this.page), this.rowsPerPage * (this.page + 1))
+                return this.sortedItems.slice(this.rowsPerPage * (this.page), this.rowsPerPage * (this.page + 1))
             },
             sortedItems() {
-                return this.slicedItems.sort((a, b) => {
+                return this.items.slice().sort((a, b) => {
                     if (a[this.sortingValue] > b[this.sortingValue]) {
                         return 1;
                     }
