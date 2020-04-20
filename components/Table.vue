@@ -102,7 +102,7 @@
             },
             selectAllItems(){
                 if (this.allItemsAreSelected) this.selectedItems = []
-                else this.selectedItems = this.sortedItems
+                else this.selectedItems = this.slicedItems
             },
             deleteItem(item){
                 if (!confirm("Are you sure you want to delete item?")) return
@@ -124,7 +124,7 @@
                 )
             },
             allItemsAreSelected() {
-                return this.selectedItems.length === this.sortedItems.length
+                return this.selectedItems.length === this.slicedItems.length
             },
 
 
