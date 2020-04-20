@@ -2,7 +2,8 @@
     <div>
         <h1>Тестовое задание Vue.js</h1>
         <button class="btn" @click.prevent="getProducts">Get Products</button>
-        <Table :items="this.products" @deleteItems="(items) => deleteItems(items)"/>
+        <button class="btn" @click.prevent="getProducts5000">Get Products 5000</button>
+        <Table :items="products" @deleteItems="(items) => deleteItems(items)"/>
     </div>
 
 </template>
@@ -31,6 +32,11 @@
             getProducts() {
                 const products = getProducts()
                     .then(data => this.setProducts(data))
+                    .catch(error => alert('Server error'))
+            },
+            getProducts5000() {
+                const products = getProducts()
+                    .then(data => this.setProducts([...data, ...data, ...data, ...data, ...data]))
                     .catch(error => alert('Server error'))
             }
         }

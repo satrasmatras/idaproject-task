@@ -30,13 +30,17 @@
                     <option v-for="variant in rowsPerPageVariants">
                         {{variant}}
                     </option>
+                    <option :value="this.items.length">
+                        All {{items.length}}
+                    </option>
 
                 </select>
-                Pagination
-                <select multiple v-model="hiddenColumns">
+                {{selectedColumns.length}} columns selected
+                <select multiple v-model="selectedColumns">
                     <option
                             v-for="column in columns"
-                            v-bind:value="column">
+                            v-bind:value="column"
+                            :selected="true">
                         {{column.title}}
                     </option>
                 </select>
@@ -110,6 +114,9 @@
                 this.$emit('deleteItems', items)
             }
         },
+        async mounted(){
+            this.selectedColumns = this.columns
+        },
         computed: {
             allItemsAreSelected() {
                 return this.selectedItems.length === this.sortedItems.length
@@ -139,7 +146,7 @@
 
             showedColumns() {
                 return this.columns
-                    .filter(column => !!this.hiddenColumns.length ? !this.hiddenColumns.some(hc => hc.value === column.value) : true)
+                    .filter(column => this.selectedColumns.some(hc => hc.value === column.value))
             }
         }
 
@@ -157,7 +164,7 @@
                     {title: 'Carbs', value: 'carbs'},
                     {title: 'Protein', value: 'protein'},
                 ],
-                hiddenColumns: [],
+                selectedColumns: [],
                 rowsPerPageVariants: [
                     10,
                     15,
