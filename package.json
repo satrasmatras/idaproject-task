@@ -1,0 +1,17 @@
+{
+  "name": "idaproject-task",
+  "scripts": {
+    "dev": "nuxt"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Denis Gorshkov (satrasmatrassatras@gmail.com)",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "nuxt": "^2.12.2"
+  },
+  "devDependencies": {
+    "@nuxt/typescript-build": "^0.6.5"
+  }
+}
